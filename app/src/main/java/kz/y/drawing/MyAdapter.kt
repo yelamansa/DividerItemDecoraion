@@ -3,9 +3,11 @@ package kz.y.drawing
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(private val list: List<String>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class MyAdapter : ListAdapter<MyDataClass, MyAdapter.MyViewHolder>(difUtil) {
 
     class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
 
@@ -16,9 +18,21 @@ class MyAdapter(private val list: List<String>) : RecyclerView.Adapter<MyAdapter
 
     }
 
-    override fun getItemCount(): Int = list.size
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.textView.text = list[position]
+        holder.textView.text = getItem(position).subTitle
+        println("Bind position: $position")
+    }
+
+    private object difUtil: DiffUtil.ItemCallback<MyDataClass>() {
+
+        override fun areItemsTheSame(
+                oldItem: MyDataClass,
+                newItem: MyDataClass
+        ): Boolean = oldItem.id == newItem.id
+
+        override fun areContentsTheSame(
+                oldItem: MyDataClass,
+                newItem: MyDataClass
+        ): Boolean = oldItem == newItem
     }
 }
